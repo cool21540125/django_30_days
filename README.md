@@ -1,16 +1,15 @@
 # 鐵人賽 - Django
-- 2018/04/11(三)
-[Django 鐵人賽 30天](https://ithelp.ithome.com.tw/articles/10157091)
-
-**自學用!!**
+- 2018/04/11(三) - 1~6 done
+- [Django 鐵人賽 30天](https://ithelp.ithome.com.tw/articles/10157091)
+- **自學!!**
 
 ```cmd
 :: 我在 Win10, 使用 Anaconda3.6版執行~~
 > python --version
 Python 3.6.0 :: Anaconda 4.3.0 (64-bit)
 
-:: 建立虛擬環境
-> 
+:: 建立 && 進入 虛擬環境
+:: conda create --name <env name>
 
 > pip install django==1.11.12
 
@@ -32,7 +31,7 @@ Python 3.6.0 :: Anaconda 4.3.0 (64-bit)
 > python manage.py migrate
 
 > python
-:: 完成上述設定後, 進入python, 執行看看, 沒報錯表示資料庫設定OK
+:: 完成上述設定後, 進入python, 執行看看, 沒報錯表示資料庫設定OK ((這邊是很久以前寫的, 但好像會出錯!!))
 from django.db import connection
 cursor = connection.cursor()
 ```
@@ -65,20 +64,31 @@ cursor = connection.cursor()
 
 ```py
 # 這邊是我瞎掰的, 但概念就是這樣
-def getRequest():
+def make_response():
     response = view(request, data, headers, URL, ...)   # django.http.HttpResponse 物件
     return response
 ```
 
 #### 改底下幾個個地方
 * /lunch/settings/base.py
-    * INSTALLED_APPS 內, 增加 `stores`
+```py
+# ...pass
+INSTALLED_APPS = [
+    'stores',       ### 增加這行
+    'django.contrib.admin',
+# pass...
+```
 * /lunch/urls.py
-    * from django.conf.urls import url, include
-    * url(r'^stores/', include('stores.urls')),
-* /lunch/stores/urls.py
-    * 增加下面這包
+```py
+from django.conf.urls import url, include   ### 增加 include
+from django.contrib import admin
 
+urlpatterns = [
+    url(r'^stores/', include('stores.urls')),   ### 增加 app router
+    url(r'^admin/', admin.site.urls),
+]
+```
+* /lunch/stores/urls.py
 ```py
 from django.conf.urls import url
 from . import views
@@ -87,8 +97,25 @@ urlpatterns = [
     url(r'^$', views.home),
 ]
 ```
-
-> `127.0.0.1:8000/stores/` 就有東西了!!
-
+* /lunch/stores/templates/home.url
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>午餐系統</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'home' %}">午餐系統</a>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
+```
 
 

@@ -118,4 +118,80 @@ urlpatterns = [
 </html>
 ```
 
+----------------------------------------------
 
+* /stores/models.py
+```py
+class Store(models.Model):
+
+    name = models.CharField(max_length=20)
+    notes = models.TextField(blank=True, default='')
+
+    def __str__(self):
+        return self.name
+
+
+class MenuItem(models.Model):
+
+    store = models.ForeignKey('Store', related_name='menu_items')
+    name = models.CharField(max_length=20)
+    price = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+```
+
+```cmd
+:: 重新偵測 models.py, 並且對目前 資料庫 的狀況做紀錄.
+> python manage.py makemigrations stores
+Migrations for 'stores':
+  0001_initial.py:
+    - Create model MenuItem
+    - Create model Store
+    - Add field store to menuitem
+```
+> 這些資訊被放在 `store/migrations/0001_initial.py`. 
+
+```cmd
+:: 將 資料庫 與 models.py同步.
+> python manage.py migrate stores
+Operations to perform:
+  Apply all migrations: stores
+Running migrations:
+  Applying stores.0001_initial... OK
+```
+
+
+[Win10找不到'sqlite3'的解法](https://stackoverflow.com/questions/4578231/error-while-accessing-sqlite3-shell-from-django-application/4578325)
+```cmd
+> python manage.py dbshell
+SQLite version 3.23.1 2018-04-10 17:39:29
+Enter ".help" for usage hints.
+
+sqlite> .tables
+auth_group                  django_admin_log
+auth_group_permissions      django_content_type
+auth_permission             django_migrations
+auth_user                   django_session
+auth_user_groups            stores_menuitem
+auth_user_user_permissions  stores_stores
+
+sqlite> select * from django_migrations;
+1|contenttypes|0001_initial|2018-04-11 15:50:39.368698
+2|auth|0001_initial|2018-04-11 15:50:39.393640
+3|admin|0001_initial|2018-04-11 15:50:39.415085
+...
+13|sessions|0001_initial|2018-04-11 15:50:39.625293
+14|stores|0001_initial|2018-04-12 16:14:09.528863
+:: 目前各 app 被 migrate 到哪個階段，以及進行的時間
+```
+
+Migration 結束
+
+-------------------------------------------
+
+## Django admin
+```cmd
+> python manage.py createsuperuser
+:: http://localhost:8000/admin/
+```

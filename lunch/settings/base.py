@@ -28,7 +28,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'stores',
-    'django.contrib.admin',
+    'django.contrib.admin',     # 這一行啟用 Django admin
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

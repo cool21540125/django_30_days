@@ -2,7 +2,6 @@ from .base import *
 
 SECRET_KEY = '^*3p$!_zg@@%$!-djpvc*&()YE#6150!bg5~"/;^gs*'
 DEBUG = True
-TEMPLATE_DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Stores(models.Model):
+class Store(models.Model):
 
     name = models.CharField(max_length=20)
     notes = models.TextField(blank=True, default='')
@@ -12,7 +12,7 @@ class Stores(models.Model):
 
 class MenuItem(models.Model):
 
-    store = models.ForeignKey('Stores', related_name='menu_items')
+    store = models.ForeignKey('Store', related_name='menu_items')
     name = models.CharField(max_length=20)
     price = models.IntegerField()
 

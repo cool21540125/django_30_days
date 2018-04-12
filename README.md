@@ -195,3 +195,16 @@ Migration 結束
 > python manage.py createsuperuser
 :: http://localhost:8000/admin/
 ```
+
+-------------------------------------------
+
+## Django 的 ORM query 模式如下：
+* Model class 的某些 attributes（預設是 objects）會回傳一個 model manager。
+* Model manager 提供 query methods，回傳 query 物件——這是一個 iterable，所以你可以對它使用 index 與 iterator 介面。
+* Query 物件同樣提供 query methods，可以產生新的 Query 物件。
+* 當你實際需要 Query 物件中包含的 model 物件時，Django 才會真正從資料庫把資料拿出來。
+
+example:
+```py
+stores = Store.objects.all()
+```
